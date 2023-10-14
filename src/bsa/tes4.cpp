@@ -486,7 +486,7 @@ namespace bsa::tes4
 			}
 			const std::string_view pview{ a_path };
 
-			const auto [stem, extension] = [&]() noexcept
+			const auto p = [&]() noexcept
 				-> std::pair<std::string_view, std::string_view> {
 				const auto split = pview.find_last_of('.');
 				if (split != std::string_view::npos) {
@@ -501,6 +501,8 @@ namespace bsa::tes4
 					};
 				}
 			}();
+			std::string_view stem = p.first;
+			std::string_view extension = p.second;
 
 			if (!stem.empty() &&
 				stem.length() < 260 &&
@@ -1074,7 +1076,9 @@ namespace bsa::tes4
 			hashing::hash hash;
 			hash.read(a_in, a_header.endian());
 
-			auto [size, offset] = a_in->read<std::uint32_t, std::uint32_t>();
+			auto [size_, offset_] = a_in->read<std::uint32_t, std::uint32_t>();
+			auto size = size_;
+			auto offset = offset_;
 
 			const detail::restore_point _{ a_in };
 			a_in->seek_absolute(offset & ~file::isecondary_archive);
