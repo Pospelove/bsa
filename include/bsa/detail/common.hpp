@@ -1074,7 +1074,7 @@ namespace bsa::components
 			_hash(a_hash)
 		{
 			if (a_in.has_file() && a_in.shallow_copy()) {
-				_name.emplace<name_proxied>(a_name, a_in.file());
+				_name = name_proxied{ a_name, a_in.file() };
 			} else {
 				if (a_in.deep_copy()) {
 					_name.emplace<name_owner>(a_name);
